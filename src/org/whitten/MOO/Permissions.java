@@ -11,6 +11,11 @@ public class Permissions {
     public Permissions() {
     }
 
+    public Permissions(Boolean readable, Boolean writable) {
+        this.readable = readable;
+        this.writable = writable;
+    }
+
     public Boolean getReadable() {
         return readable;
     }

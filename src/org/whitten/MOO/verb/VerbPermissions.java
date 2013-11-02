@@ -9,14 +9,15 @@ import org.whitten.MOO.Permissions;
 public class VerbPermissions extends Permissions {
 
     private Boolean executable = false;
+    private Boolean debug = false;
     
     public VerbPermissions() {
     }
 
-    public VerbPermissions(Boolean readable, Boolean writable, Boolean executable) {
-        this.setReadable(readable);
-        this.setWritable(writable);
+    public VerbPermissions(Boolean readable, Boolean writable, Boolean executable, Boolean debug) {
+        super(readable, writable);
         this.executable = executable;
+        this.debug = debug;
     }
 
     public Boolean getExecutable() {
@@ -26,4 +27,13 @@ public class VerbPermissions extends Permissions {
     public void setExecutable(Boolean executable) {
         this.executable = executable;
     }
+
+    public Boolean getDebug() {
+        return debug;
+    }
+
+    public void setDebug(Boolean debug) {
+        this.debug = debug;
+    }
+
 }

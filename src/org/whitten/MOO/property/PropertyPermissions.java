@@ -18,8 +18,7 @@ public class PropertyPermissions extends Permissions {
     }
 
     public PropertyPermissions(Boolean readable, Boolean writable, Boolean chown) {
-        this.setReadable(readable);
-        this.setWritable(writable);
+        super(readable, writable);
         this.chown = chown;
     }
 
