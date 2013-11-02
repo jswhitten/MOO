@@ -1,13 +1,17 @@
 package org.whitten.MOO.object;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.whitten.MOO.Named;
 import org.whitten.MOO.Owned;
 import org.whitten.MOO.Permissioned;
 import org.whitten.MOO.Permissions;
 import org.whitten.MOO.exceptions.*;
 import org.whitten.MOO.property.Property;
+import org.whitten.MOO.type.ClearType;
+import org.whitten.MOO.type.ObjType;
 import org.whitten.MOO.verb.Verb;
 
 /**
@@ -15,7 +19,7 @@ import org.whitten.MOO.verb.Verb;
  * @author Jed Whitten <jed@whitten.org>
  */
 public class MooObject implements Named, Permissioned, Owned {
-    private Integer objectNumber = null;
+    private ObjType objectNumber = null;
     private Boolean recycled = false;
     private MooObject parent = null;
     private MooObject owner = null;
@@ -25,10 +29,10 @@ public class MooObject implements Named, Permissioned, Owned {
     private String name = null;
     private List<String> aliases;
     private List<Verb> verbs;
-    private List<Property> properties;
+    private Map<String,Property> properties;
     
     public MooObject(Integer objectNumber) {
-        this.objectNumber = objectNumber;
+        this.objectNumber = new ObjType(objectNumber);
         this.recycled = true;
     }
 
@@ -41,17 +45,17 @@ public class MooObject implements Named, Permissioned, Owned {
         if(objectNumber == null || aliases == null || owner == null) {
             throw new IllegalArgumentException();
         }
-        this.objectNumber = objectNumber;
+        this.objectNumber = new ObjType(objectNumber);
         this.name = aliases.get(0);
         this.aliases = aliases;
         this.owner = owner;
         
         this.verbs = new ArrayList<>();
-        this.properties = new ArrayList<>();
+        this.properties = new HashMap<>();
         this.permissions = new Permissions();
     }
 
-    public Integer getObjectNumber() {
+    public ObjType getObjectNumber() {
         return objectNumber;
     }
 
@@ -114,7 +118,7 @@ public class MooObject implements Named, Permissioned, Owned {
         return verbs;
     }
 
-    public List<Property> getProperties() {
+    public Map<String, Property> getProperties() {
         return properties;
     }
     
@@ -134,18 +138,20 @@ public class MooObject implements Named, Permissioned, Owned {
     }
 
     public Property getProperty(String name) throws PropertyNotFoundException {
-        return getProperty(name, false);
+        // default to inherited because inherited props are on object
+        return getProperty(name, true);
     }
     
     public Property getProperty(String name, Boolean inherited) throws PropertyNotFoundException {
-        for(Property property : properties) {
-            if(property.getName().equals(name)) {
-                return property;
-            } else if(inherited && parent != null) {
-                return parent.getProperty(name, true);
+        if(properties.containsKey(name)) {
+            Property prop = properties.get(name);
+            if(prop.getValue() instanceof ClearType && inherited) {
+                return parent.getProperty(name);
+            } else {
+                return prop;
             }
         }
-        throw new PropertyNotFoundException("#" + objectNumber + "." + name + " does not exist.");
+        throw new PropertyNotFoundException(objectNumber.toString() + "." + name + " does not exist.");
     }
     
     public MooObject getLocation() {
