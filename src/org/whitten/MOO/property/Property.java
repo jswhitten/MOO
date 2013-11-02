@@ -6,6 +6,7 @@ import org.whitten.MOO.Owned;
 import org.whitten.MOO.Permissioned;
 import org.whitten.MOO.Permissions;
 import org.whitten.MOO.object.MooObject;
+import org.whitten.MOO.type.Type;
 
 /**
  *
@@ -13,10 +14,9 @@ import org.whitten.MOO.object.MooObject;
  */
 public class Property implements Named, Permissioned, Owned {
     private String name;
-    private Integer type;
     private PropertyPermissions permissions;
     private MooObject owner;
-    private String value; // TODO: typed values
+    private Type value; // TODO: typed values
 
     @Override
     public String getName() {
@@ -61,11 +61,11 @@ public class Property implements Named, Permissioned, Owned {
         this.owner = owner;
     }
 
-    public String getValue() {
+    public Type getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Type value) {
         this.value = value;
     }
 }
