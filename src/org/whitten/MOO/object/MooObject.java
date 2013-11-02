@@ -126,18 +126,18 @@ public class MooObject implements Named, Permissioned, Owned {
                 return parent.getVerb(alias);
             }
         }
-        throw new VerbNotFoundException();
+        throw new VerbNotFoundException("#" + objectNumber + ":" + alias + " does not exist.");
     }
 
-    public Property getProperty(String alias) throws PropertyNotFoundException {
+    public Property getProperty(String name) throws PropertyNotFoundException {
         for(Property property : properties) {
-            if(property.getAliases().contains(alias)) {
+            if(property.getName().equals(name)) {
                 return property;
             } else if(parent != null) {
-                return parent.getProperty(alias);
+                return parent.getProperty(name);
             }
         }
-        throw new PropertyNotFoundException();
+        throw new PropertyNotFoundException("#" + objectNumber + "." + name + " does not exist.");
     }
     
     public MooObject getLocation() {
