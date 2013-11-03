@@ -22,7 +22,13 @@ import org.whitten.MOO.type.ObjType;
 public class DatabaseImporter {
     private final static Logger LOGGER = Logger.getLogger(DatabaseImporter.class.getName());
     
-    public Database read(File file) throws FileNotFoundException, InvalidDatabaseException {
+    private File file;
+
+    public DatabaseImporter(File file) {
+        this.file = file;
+    }
+    
+    public Database read() throws FileNotFoundException, InvalidDatabaseException {
         Scanner s = new Scanner(file);
         Database db = null;
         
@@ -102,7 +108,7 @@ public class DatabaseImporter {
                     // Not recycled
                     String name = s.nextLine();
                     s.nextLine(); // dummy
-                    ObjType flags = new ObjType(s.nextInt());
+                    ObjType flags = new ObjType(s.nextInt()); // TODO
                     ObjType owner = new ObjType(s.nextInt());
                     ObjType location = new ObjType(s.nextInt());
                     s.nextLine(); // first object in contents
@@ -112,11 +118,19 @@ public class DatabaseImporter {
                     s.nextLine(); // next child of object's parent
                     
                     MooObject obj = new MooObject(db, objNum, name, owner, parent);
+                    obj.setLocation(location); // TODO need to set contents on its location too!
+                    
                     try {
                         db.addObject(obj);
                     } catch(InvalidObjectException e) {
                         throw new InvalidDatabaseException(e);
                     }
+                    
+                    // TODO Verb definitions
+                    
+                    // TODO Property names
+                    
+                    // TODO Property definitions
                 }
             } else {
                 throw new InvalidDatabaseException("Error reading objects");
