@@ -1,12 +1,13 @@
 package org.whitten.MOO;
 
 import org.whitten.MOO.object.MooObject;
+import org.whitten.MOO.type.ObjType;
 
 /**
  *
  * @author Jed Whitten <jed@whitten.org>
  */
 public interface Owned {
-    public MooObject getOwner();
-    public void setOwner(MooObject owner);
+    public ObjType getOwner();
+    public void setOwner(ObjType owner);
 }

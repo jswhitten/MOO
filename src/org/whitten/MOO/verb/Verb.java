@@ -1,17 +1,17 @@
 package org.whitten.MOO.verb;
 
 import java.util.List;
-import org.whitten.MOO.Named;
 import org.whitten.MOO.Owned;
 import org.whitten.MOO.Permissioned;
 import org.whitten.MOO.Permissions;
 import org.whitten.MOO.object.MooObject;
+import org.whitten.MOO.type.ObjType;
 
 /**
  *
  * @author Jed Whitten <jed@whitten.org>
  */
-public class Verb implements Named, Permissioned, Owned {
+public class Verb implements Permissioned, Owned {
     // dobj = Arg.values()[1]; --> Arg.ANY
     public static enum Arg {
         NONE("none"),
@@ -63,29 +63,16 @@ public class Verb implements Named, Permissioned, Owned {
     private Arg iobj;
     private Prep prep;
     private List<String> code;
-    private MooObject owner;
+    private ObjType owner;
     private String name = null;
-    private List<String> aliases;
     private VerbPermissions permissions;
     
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return aliases;
-    }
-
-    @Override
-    public void setAliases(List<String> aliases) {
-        this.aliases = aliases;
     }
 
     @Override
@@ -99,12 +86,12 @@ public class Verb implements Named, Permissioned, Owned {
     }
 
     @Override
-    public MooObject getOwner() {
+    public ObjType getOwner() {
         return owner;
     }
 
     @Override
-    public void setOwner(MooObject owner) {
+    public void setOwner(ObjType owner) {
         this.owner = owner;
     }
     

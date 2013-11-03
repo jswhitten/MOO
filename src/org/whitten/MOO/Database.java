@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.whitten.MOO.exceptions.InvalidObjectException;
 import org.whitten.MOO.object.MooObject;
+import org.whitten.MOO.type.ObjType;
 
 /**
  *
@@ -12,8 +14,8 @@ import org.whitten.MOO.object.MooObject;
  */
 public class Database {
     private Integer version;
-    private Map<Integer, MooObject> objects;
-    private List<Integer> players;
+    private Map<ObjType, MooObject> objects;
+    private List<ObjType> players;
     
     // TODO - clocks, queued tasks, suspended tasks, active connections
 
@@ -31,23 +33,32 @@ public class Database {
         return new ArrayList<>(objects.values());
     }
     
-    public MooObject getObject(Integer objNum) {
+    public MooObject getObject(ObjType objNum) {
         return objects.get(objNum);
     }
+    
+    public void addObject(MooObject obj) throws InvalidObjectException {
+        ObjType objNum = obj.getObjectNumber();
+        if(!objects.containsKey(objNum)) {
+            objects.put(objNum, obj);
+        } else {
+            throw new InvalidObjectException("Object " + objNum.toString() + " already exists");
+        }
+    }
 
-    public List<Integer> getPlayers() {
+    public List<ObjType> getPlayers() {
         return players;
     }
     
     public List<MooObject> getPlayerObjects() {
         List<MooObject> playerObjects = new ArrayList<>();
-        for(Integer player : players) {
+        for(ObjType player : players) {
             playerObjects.add(objects.get(player));
         }
         return playerObjects;
     }
 
-    public void setPlayers(List<Integer> players) {
+    public void setPlayers(List<ObjType> players) {
         this.players = players;
     }
 }
