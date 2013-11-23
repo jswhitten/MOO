@@ -19,7 +19,7 @@ import org.whitten.MOO.verb.Verb;
  * @author Jed Whitten <jed@whitten.org>
  */
 public class MooObject implements Permissioned, Owned {
-    private Database db = null;
+    //private Database db = null;
     private ObjType objectNumber = null;
     private Boolean recycled = false;
     private MooObject parent = null;
@@ -31,22 +31,21 @@ public class MooObject implements Permissioned, Owned {
     private List<Verb> verbs;
     private Map<String,Property> properties;
     
-    public MooObject(Database db, ObjType objectNumber) {
-        this.db = db;
+    public MooObject(ObjType objectNumber) {
         this.objectNumber = objectNumber;
         this.recycled = true;
     }
 
-    public MooObject(Database db, ObjType objectNumber, String name, MooObject owner, MooObject parent) {
-        this(db, objectNumber, name, owner);
+    public MooObject(ObjType objectNumber, String name, MooObject owner, MooObject parent) {
+        this(objectNumber, name, owner);
         this.parent = parent;
     }
     
-    public MooObject(Database db, ObjType objectNumber, String name, MooObject owner) {
-        if(db == null || objectNumber == null || name == null || owner == null) {
+    public MooObject(ObjType objectNumber, String name, MooObject owner) {
+        if(objectNumber == null || name == null || owner == null) {
             throw new IllegalArgumentException();
         }
-        this.db = db;
+        //this.db = db;
         this.objectNumber = objectNumber;
         this.name = name;
         this.owner = owner;

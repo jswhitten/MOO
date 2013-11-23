@@ -22,7 +22,7 @@ import org.whitten.MOO.type.ObjType;
 public class DatabaseImporter {
     private final static Logger LOGGER = Logger.getLogger(DatabaseImporter.class.getName());
     
-    private File file;
+    private final File file;
 
     public DatabaseImporter(File file) {
         this.file = file;
@@ -104,7 +104,7 @@ public class DatabaseImporter {
                 LOGGER.info("    Reading object " + objNum.toString());
                 if(objNumLine.contains("recycled")) {
                     // Recycled object
-                    MooObject obj = new MooObject(db, objNum);
+                    MooObject obj = new MooObject(objNum);
                     try {
                         db.addObject(obj);
                     } catch(InvalidObjectException e) {
@@ -123,8 +123,8 @@ public class DatabaseImporter {
                     s.nextLine(); // first child object
                     s.nextLine(); // next child of object's parent
                     
-                    MooObject obj = new MooObject(db, objNum, name, owner, parent);
-                    obj.setLocation(location); // TODO need to set contents on its location too!
+                    MooObject obj = new MooObject(objNum, name, owner, parent);
+                    obj.setLocation(location);
                     
                     try {
                         db.addObject(obj);

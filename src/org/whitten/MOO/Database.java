@@ -34,6 +34,9 @@ public class Database {
     }
     
     public MooObject getObject(ObjType objNum) {
+        if(!objects.containsKey(objNum.getValue())) {
+            objects.put(objNum.getValue(), new MooObject(objNum));
+        }
         return objects.get(objNum.getValue());
     }
     
