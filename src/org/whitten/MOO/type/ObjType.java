@@ -15,7 +15,7 @@ public class ObjType implements Type {
         if(value >= 0) {
             this.value = value;
         } else {
-            throw new IllegalArgumentException("Invalid object number: #" + value);
+            this.value = null;
         }
             
     }

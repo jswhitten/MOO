@@ -48,7 +48,8 @@ public class DatabaseImporter {
         int numPlayers = s.nextInt();
         
         String[] dbIntro = 
-                {Integer.toString(numObjects), 
+                {Integer.toString(db.getVersion()),
+                Integer.toString(numObjects), 
                 Integer.toString(numVerbs), 
                 Integer.toString(numPlayers)};
         LOGGER.log(Level.INFO, "Database version {0} - {1} objects, {2} verbs, {3} players", dbIntro);
@@ -57,9 +58,12 @@ public class DatabaseImporter {
         List<ObjType> players = new ArrayList<>();
         LOGGER.info("Scanning players");
         for(int i = 0; i < numPlayers; i++) {
-            players.add(new ObjType(s.nextInt()));
+            ObjType playerObj = new ObjType(s.nextInt());
+            players.add(playerObj);
+            LOGGER.info("    Added player " + playerObj);
         }
         db.setPlayers(players);
+        s.nextLine();
         
         // Object block
         LOGGER.info("Scanning objects");
@@ -92,10 +96,12 @@ public class DatabaseImporter {
     private void scanObjects(Database db, Scanner s, Integer numObjects) throws InvalidDatabaseException {
         for(int i = 0; i < numObjects; i++) {
             String objNumLine = s.nextLine();
+            //LOGGER.info("next line: " + objNumLine);
             Pattern p = Pattern.compile("#(\\d+)");
             Matcher m = p.matcher(objNumLine);
             if(m.find()) {
                 ObjType objNum = new ObjType(Integer.parseInt(m.group(1)));
+                LOGGER.info("    Reading object " + objNum.toString());
                 if(objNumLine.contains("recycled")) {
                     // Recycled object
                     MooObject obj = new MooObject(db, objNum);
@@ -109,11 +115,11 @@ public class DatabaseImporter {
                     String name = s.nextLine();
                     s.nextLine(); // dummy
                     ObjType flags = new ObjType(s.nextInt()); // TODO
-                    ObjType owner = new ObjType(s.nextInt());
-                    ObjType location = new ObjType(s.nextInt());
+                    MooObject owner = db.getObject(new ObjType(s.nextInt()));
+                    MooObject location = db.getObject(new ObjType(s.nextInt()));
                     s.nextLine(); // first object in contents
                     s.nextLine(); // next object in location's contents
-                    ObjType parent = new ObjType(s.nextInt());
+                    MooObject parent = db.getObject(new ObjType(s.nextInt()));
                     s.nextLine(); // first child object
                     s.nextLine(); // next child of object's parent
                     
@@ -131,6 +137,10 @@ public class DatabaseImporter {
                     // TODO Property names
                     
                     // TODO Property definitions
+                    // hack
+                    while(!s.hasNext("#(.*)") && s.hasNextLine()) {
+                        s.nextLine();
+                    }
                 }
             } else {
                 throw new InvalidDatabaseException("Error reading objects");

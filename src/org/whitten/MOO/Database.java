@@ -13,8 +13,8 @@ import org.whitten.MOO.type.ObjType;
  * @author Jed Whitten <jed@whitten.org>
  */
 public class Database {
-    private Integer version;
-    private Map<ObjType, MooObject> objects;
+    private final Integer version;
+    private Map<Integer, MooObject> objects;
     private List<ObjType> players;
     
     // TODO - clocks, queued tasks, suspended tasks, active connections
@@ -34,13 +34,13 @@ public class Database {
     }
     
     public MooObject getObject(ObjType objNum) {
-        return objects.get(objNum);
+        return objects.get(objNum.getValue());
     }
     
     public void addObject(MooObject obj) throws InvalidObjectException {
         ObjType objNum = obj.getObjectNumber();
-        if(!objects.containsKey(objNum)) {
-            objects.put(objNum, obj);
+        if(!objects.containsKey(objNum.getValue())) {
+            objects.put(objNum.getValue(), obj);
         } else {
             throw new InvalidObjectException("Object " + objNum.toString() + " already exists");
         }
@@ -53,7 +53,7 @@ public class Database {
     public List<MooObject> getPlayerObjects() {
         List<MooObject> playerObjects = new ArrayList<>();
         for(ObjType player : players) {
-            playerObjects.add(objects.get(player));
+            playerObjects.add(objects.get(player.getValue()));
         }
         return playerObjects;
     }

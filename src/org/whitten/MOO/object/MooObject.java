@@ -22,9 +22,9 @@ public class MooObject implements Permissioned, Owned {
     private Database db = null;
     private ObjType objectNumber = null;
     private Boolean recycled = false;
-    private ObjType parent = null;
-    private ObjType owner = null;
-    private ObjType location = null;
+    private MooObject parent = null;
+    private MooObject owner = null;
+    private MooObject location = null;
     private List<MooObject> contents = null;
     private Permissions permissions = null;
     private String name = null;
@@ -37,12 +37,12 @@ public class MooObject implements Permissioned, Owned {
         this.recycled = true;
     }
 
-    public MooObject(Database db, ObjType objectNumber, String name, ObjType owner, ObjType parent) {
+    public MooObject(Database db, ObjType objectNumber, String name, MooObject owner, MooObject parent) {
         this(db, objectNumber, name, owner);
         this.parent = parent;
     }
     
-    public MooObject(Database db, ObjType objectNumber, String name, ObjType owner) {
+    public MooObject(Database db, ObjType objectNumber, String name, MooObject owner) {
         if(db == null || objectNumber == null || name == null || owner == null) {
             throw new IllegalArgumentException();
         }
@@ -50,6 +50,7 @@ public class MooObject implements Permissioned, Owned {
         this.objectNumber = objectNumber;
         this.name = name;
         this.owner = owner;
+        this.contents = new ArrayList<>();
         
         this.verbs = new ArrayList<>();
         this.properties = new HashMap<>();
@@ -60,21 +61,21 @@ public class MooObject implements Permissioned, Owned {
         return objectNumber;
     }
 
-    public ObjType getParent() {
+    public MooObject getParent() {
         return parent;
     }
 
-    public void setParent(ObjType parent) {
+    public void setParent(MooObject parent) {
         this.parent = parent;
     }
 
     @Override
-    public ObjType getOwner() {
+    public MooObject getOwner() {
         return owner;
     }
 
     @Override
-    public void setOwner(ObjType owner) {
+    public void setOwner(MooObject owner) {
         this.owner = owner;
     }
 
@@ -113,7 +114,7 @@ public class MooObject implements Permissioned, Owned {
             if(verb.getName().contains(alias)) { // TODO split it on spaces and check each alias
                 return verb;
             } else if(inherited && parent != null) {
-                return db.getObject(parent).getVerb(alias, true);
+                return parent.getVerb(alias, true);
             }
         }
         throw new VerbNotFoundException("#" + objectNumber + ":" + alias + " does not exist.");
@@ -128,7 +129,7 @@ public class MooObject implements Permissioned, Owned {
         if(properties.containsKey(name)) {
             Property prop = properties.get(name);
             if(prop.getValue() instanceof ClearType && inherited) {
-                return db.getObject(parent).getProperty(name);
+                return parent.getProperty(name);
             } else {
                 return prop;
             }
@@ -136,20 +137,22 @@ public class MooObject implements Permissioned, Owned {
         throw new PropertyNotFoundException(objectNumber.toString() + "." + name + " does not exist.");
     }
     
-    public ObjType getLocation() {
+    public MooObject getLocation() {
         return location;
     }
     
-    public void setLocation(ObjType location) {
+    public void setLocation(MooObject location) {
         if(this.location != null) {
-            db.getObject(location).contents.remove(this);
+            location.contents.remove(this);
         }
         
-        this.location = location;
-
-        if(this.location != null) {
-            db.getObject(location).contents.add(this);
+        if(location != null) {
+            this.location = location;
+            location.getContents().add(this);
+        } else {
+            this.location = null;
         }
+
     }
 
     public Boolean getRecycled() {

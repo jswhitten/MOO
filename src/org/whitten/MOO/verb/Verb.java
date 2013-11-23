@@ -63,7 +63,7 @@ public class Verb implements Permissioned, Owned {
     private Arg iobj;
     private Prep prep;
     private List<String> code;
-    private ObjType owner;
+    private MooObject owner;
     private String name = null;
     private VerbPermissions permissions;
     
@@ -86,12 +86,12 @@ public class Verb implements Permissioned, Owned {
     }
 
     @Override
-    public ObjType getOwner() {
+    public MooObject getOwner() {
         return owner;
     }
 
     @Override
-    public void setOwner(ObjType owner) {
+    public void setOwner(MooObject owner) {
         this.owner = owner;
     }
     
