@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.whitten.MOO.exceptions.InvalidObjectException;
 import org.whitten.MOO.object.MooObject;
 import org.whitten.MOO.type.ObjType;
@@ -14,7 +16,7 @@ import org.whitten.MOO.type.ObjType;
  */
 public class Database {
     private final Integer version;
-    private Map<Integer, MooObject> objects;
+    private final Map<Integer, MooObject> objects;
     private List<ObjType> players;
     
     // TODO - clocks, queued tasks, suspended tasks, active connections
@@ -34,13 +36,21 @@ public class Database {
     }
     
     public MooObject getObject(ObjType objNum) {
+        if(objNum.getValue() == null) {
+            return null;
+        }
         if(!objects.containsKey(objNum.getValue())) {
-            objects.put(objNum.getValue(), new MooObject(objNum));
+            try {
+                addObject(new MooObject(objNum));
+                //objects.put(objNum.getValue(), new MooObject(objNum));
+            } catch (InvalidObjectException ex) {
+                Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return objects.get(objNum.getValue());
     }
     
-    public void addObject(MooObject obj) throws InvalidObjectException {
+    private void addObject(MooObject obj) throws InvalidObjectException {
         ObjType objNum = obj.getObjectNumber();
         if(!objects.containsKey(objNum.getValue())) {
             objects.put(objNum.getValue(), obj);

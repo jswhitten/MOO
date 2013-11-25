@@ -101,15 +101,17 @@ public class DatabaseImporter {
             Matcher m = p.matcher(objNumLine);
             if(m.find()) {
                 ObjType objNum = new ObjType(Integer.parseInt(m.group(1)));
-                LOGGER.info("    Reading object " + objNum.toString());
+                LOGGER.log(Level.INFO, "    Reading object {0}", objNum.toString());
                 if(objNumLine.contains("recycled")) {
                     // Recycled object
-                    MooObject obj = new MooObject(objNum);
-                    try {
-                        db.addObject(obj);
-                    } catch(InvalidObjectException e) {
-                        throw new InvalidDatabaseException(e);
-                    }
+                    MooObject obj = db.getObject(objNum);
+                    obj.setRecycled(Boolean.TRUE);
+//                    MooObject obj = new MooObject(objNum);
+//                    try {
+//                        db.addObject(obj);
+//                    } catch(InvalidObjectException e) {
+//                        throw new InvalidDatabaseException(e);
+//                    }
                 } else {
                     // Not recycled
                     String name = s.nextLine();
@@ -123,14 +125,19 @@ public class DatabaseImporter {
                     s.nextLine(); // first child object
                     s.nextLine(); // next child of object's parent
                     
-                    MooObject obj = new MooObject(objNum, name, owner, parent);
+                    MooObject obj = db.getObject(objNum);
+                    obj.setRecycled(Boolean.FALSE);
+                    obj.setName(name);
+                    obj.setOwner(owner);
+                    obj.setParent(parent);
+                            //new MooObject(objNum, name, owner, parent);
                     obj.setLocation(location);
                     
-                    try {
-                        db.addObject(obj);
-                    } catch(InvalidObjectException e) {
-                        throw new InvalidDatabaseException(e);
-                    }
+//                    try {
+//                        db.addObject(obj);
+//                    } catch(InvalidObjectException e) {
+//                        throw new InvalidDatabaseException(e);
+//                    }
                     
                     // TODO Verb definitions
                     

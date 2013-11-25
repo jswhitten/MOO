@@ -160,6 +160,12 @@ public class MooObject implements Permissioned, Owned {
 
     public void setRecycled(Boolean recycled) {
         this.recycled = recycled;
+        if(!recycled) {
+            this.contents = new ArrayList<>();
+            this.verbs = new ArrayList<>();
+            this.properties = new HashMap<>();
+            this.permissions = new Permissions();
+        }
     }
 
     public List<MooObject> getContents() {
