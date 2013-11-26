@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.whitten.MOO.Database;
 import org.whitten.MOO.Owned;
 import org.whitten.MOO.Permissioned;
 import org.whitten.MOO.Permissions;
@@ -19,7 +18,6 @@ import org.whitten.MOO.verb.Verb;
  * @author Jed Whitten <jed@whitten.org>
  */
 public class MooObject implements Permissioned, Owned {
-    //private Database db = null;
     private ObjType objectNumber = null;
     private Boolean recycled = false;
     private MooObject parent = null;
@@ -45,7 +43,6 @@ public class MooObject implements Permissioned, Owned {
         if(objectNumber == null || name == null || owner == null) {
             throw new IllegalArgumentException();
         }
-        //this.db = db;
         this.objectNumber = objectNumber;
         this.name = name;
         this.owner = owner;
@@ -116,7 +113,7 @@ public class MooObject implements Permissioned, Owned {
                 return parent.getVerb(alias, true);
             }
         }
-        throw new VerbNotFoundException("#" + objectNumber + ":" + alias + " does not exist.");
+        throw new VerbNotFoundException(objectNumber + ":" + alias + " does not exist.");
     }
 
     public Property getProperty(String name) throws PropertyNotFoundException {

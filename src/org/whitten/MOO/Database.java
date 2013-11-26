@@ -42,7 +42,6 @@ public class Database {
         if(!objects.containsKey(objNum.getValue())) {
             try {
                 addObject(new MooObject(objNum));
-                //objects.put(objNum.getValue(), new MooObject(objNum));
             } catch (InvalidObjectException ex) {
                 Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             }

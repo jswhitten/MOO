@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.whitten.MOO.Database;
 import org.whitten.MOO.exceptions.InvalidDatabaseException;
-import org.whitten.MOO.exceptions.InvalidObjectException;
 import org.whitten.MOO.object.MooObject;
 import org.whitten.MOO.type.ObjType;
 
@@ -32,7 +31,7 @@ public class DatabaseImporter {
         Scanner s = new Scanner(file);
         Database db = null;
         
-        LOGGER.info("Reading " + file.getName());
+        LOGGER.log(Level.INFO, "Reading {0}", file.getName());
     
         // Intro block
         String header = s.nextLine();
@@ -60,7 +59,7 @@ public class DatabaseImporter {
         for(int i = 0; i < numPlayers; i++) {
             ObjType playerObj = new ObjType(s.nextInt());
             players.add(playerObj);
-            LOGGER.info("    Added player " + playerObj);
+            LOGGER.log(Level.INFO, "    Added player {0}", playerObj);
         }
         db.setPlayers(players);
         s.nextLine();
@@ -96,7 +95,6 @@ public class DatabaseImporter {
     private void scanObjects(Database db, Scanner s, Integer numObjects) throws InvalidDatabaseException {
         for(int i = 0; i < numObjects; i++) {
             String objNumLine = s.nextLine();
-            //LOGGER.info("next line: " + objNumLine);
             Pattern p = Pattern.compile("#(\\d+)");
             Matcher m = p.matcher(objNumLine);
             if(m.find()) {
@@ -106,12 +104,6 @@ public class DatabaseImporter {
                     // Recycled object
                     MooObject obj = db.getObject(objNum);
                     obj.setRecycled(Boolean.TRUE);
-//                    MooObject obj = new MooObject(objNum);
-//                    try {
-//                        db.addObject(obj);
-//                    } catch(InvalidObjectException e) {
-//                        throw new InvalidDatabaseException(e);
-//                    }
                 } else {
                     // Not recycled
                     String name = s.nextLine();
@@ -130,14 +122,7 @@ public class DatabaseImporter {
                     obj.setName(name);
                     obj.setOwner(owner);
                     obj.setParent(parent);
-                            //new MooObject(objNum, name, owner, parent);
                     obj.setLocation(location);
-                    
-//                    try {
-//                        db.addObject(obj);
-//                    } catch(InvalidObjectException e) {
-//                        throw new InvalidDatabaseException(e);
-//                    }
                     
                     // TODO Verb definitions
                     
@@ -157,7 +142,7 @@ public class DatabaseImporter {
 
     private void scanVerbs(Database db, Scanner s, Integer numVerbs) {
         for(int i = 0; i < numVerbs; i++) {
-            
+            // TODO
         }
     }
 }

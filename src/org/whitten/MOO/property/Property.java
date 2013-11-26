@@ -1,11 +1,9 @@
 package org.whitten.MOO.property;
 
-import java.util.List;
 import org.whitten.MOO.Owned;
 import org.whitten.MOO.Permissioned;
 import org.whitten.MOO.Permissions;
 import org.whitten.MOO.object.MooObject;
-import org.whitten.MOO.type.ObjType;
 import org.whitten.MOO.type.Type;
 
 /**
@@ -16,7 +14,7 @@ public class Property implements Permissioned, Owned {
     private String name;
     private PropertyPermissions permissions;
     private MooObject owner;
-    private Type value; // TODO: typed values
+    private Type value;
 
     public String getName() {
         return this.name;

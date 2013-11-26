@@ -5,7 +5,6 @@ import org.whitten.MOO.Owned;
 import org.whitten.MOO.Permissioned;
 import org.whitten.MOO.Permissions;
 import org.whitten.MOO.object.MooObject;
-import org.whitten.MOO.type.ObjType;
 
 /**
  *
@@ -18,7 +17,7 @@ public class Verb implements Permissioned, Owned {
         ANY("any"),
         THIS("this");
         
-        private String value;
+        private final String value;
         
         private Arg(String value) {
             this.value = value;
